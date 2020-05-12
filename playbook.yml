@@ -1,0 +1,14 @@
+---
+- hosts: app 
+  become: yes
+  tasks:
+  - name: install epel respository
+    yum: name=epel-release state=present
+  - name: install pip
+    yum: name=python-pip state=present
+  - name: install flask
+    pip: name=Flask state=present
+  - name: copy source code from master server to slave servers
+    copy: src=/home/vagrant/ansible/app.py dest=/home/vagrant/app.py
+  - name: run web application
+    shell: nohup python app.py >/dev/null 2>&1 &
